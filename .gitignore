@@ -13,9 +13,6 @@
 /backend/node_modules
 /backend/config/master.key
 
-# DB（必要なら）
-/backend/db/*.sqlite3
-
 # React（frontend）
 /frontend/node_modules
 /frontend/dist
