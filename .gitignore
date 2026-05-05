@@ -1,0 +1,25 @@
+
+# 環境変数（絶対に上げない）
+
+.env
+.env.*
+
+
+# Rails（backend）
+
+/backend/log/*
+/backend/tmp/*
+/backend/storage/*
+/backend/node_modules
+/backend/config/master.key
+
+# DB（必要なら）
+/backend/db/*.sqlite3
+
+# React（frontend）
+/frontend/node_modules
+/frontend/dist
+
+# OS / エディタ
+.DS_Store
+.vscode/*
