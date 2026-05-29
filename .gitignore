@@ -1,5 +1,5 @@
 
-# 環境変数（絶対に上げない）
+# 環境変数
 
 .env
 .env.*
@@ -13,9 +13,14 @@
 /backend/node_modules
 /backend/config/master.key
 
-# React（frontend）
+# Next.js（frontend）
 /frontend/node_modules
 /frontend/dist
+/frontend/.next/
+/frontend/out/
+
+# Rails build artifacts
+/backend/.next/
 
 # OS / エディタ
 .DS_Store
