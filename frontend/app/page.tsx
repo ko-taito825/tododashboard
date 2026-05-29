@@ -29,8 +29,8 @@ export default function DashboardPage() {
       <div className="px-12 pt-5 pb-0">
         <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
       </div>
-      {/* hr ends at clock center: sidebar(300px) - px-4(16) - block(130) - half-gap(4) = 150px from right */}
-      <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "150px" }} />
+      {/* hr: spans only the content area, stops at sidebar left edge (300px from right) */}
+      <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "300px" }} />
 
       {/* ── Content + Right sidebar ── */}
       <div className="flex">
@@ -55,10 +55,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Right sidebar: Clock aligned with content grid, Timer below */}
+        {/* Right sidebar: Clock at same level as content grid (mt-5 matches grid) */}
         <div className="w-[300px] shrink-0 flex flex-col px-4">
-          {/* pt aligns clock top with content grid (title+hr height ≈ 85px) */}
-          <div style={{ paddingTop: "85px" }}>
+          <div className="mt-5">
             <CurrentTime />
           </div>
           <div className="mt-4">
