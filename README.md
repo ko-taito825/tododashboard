@@ -1,4 +1,7 @@
 # TodoDashboard
+<img width="3420" height="2074" alt="image" src="https://github.com/user-attachments/assets/b6b14923-57bb-4e59-a21d-2a9194436ceb" />
+
+
 
 > **UIデザインはFigmaで事前に自身で作成し、そのデザインをもとにAIコーディング（Claude Code）で実装しました。**
 
