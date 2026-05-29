@@ -3,41 +3,33 @@ import { useCallback, useEffect, useState } from "react";
 import { createTask, deleteTask, getTasks, updateTask } from "@/lib/api";
 import type { Task } from "@/types";
 
-function getWeekDates(baseDate = new Date()) {
-  const d = new Date(baseDate);
+function getWeekStart() {
+  const d = new Date();
   const day = d.getDay();
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  const monday = new Date(d.setDate(diff));
-  return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(monday);
-    date.setDate(monday.getDate() + i);
-    return date;
-  });
+  const monday = new Date(d);
+  monday.setDate(diff);
+  return monday.toISOString().slice(0, 10);
 }
-
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function WeeklyTask() {
   const [tasks, setTasks]     = useState<Task[]>([]);
-  const [adding, setAdding]   = useState<string | null>(null);
+  const [adding, setAdding]   = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const weekDates = getWeekDates();
-  const todayStr = new Date().toISOString().slice(0, 10);
 
   const load = useCallback(async () => {
-    const weekStart = weekDates[0].toISOString().slice(0, 10);
-    const data = await getTasks("week", { week_start: weekStart });
+    const data = await getTasks("week", { week_start: getWeekStart() });
     setTasks(data);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => { load(); }, [load]);
 
-  const add = async (dateStr: string) => {
+  const add = async () => {
     if (!newTitle.trim()) return;
-    const t = await createTask({ title: newTitle.trim(), due_date: dateStr, is_completed: false });
+    const today = new Date().toISOString().slice(0, 10);
+    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false });
     setTasks(prev => [...prev, t]);
-    setNewTitle("");
-    setAdding(null);
+    setNewTitle(""); setAdding(false);
   };
 
   const toggle = async (task: Task) => {
@@ -51,79 +43,44 @@ export default function WeeklyTask() {
   };
 
   return (
-    <div className="widget">
-      <p className="widget-title">WEEKLY TASK</p>
+    <div className="data-card flex flex-col h-40">
+      <p className="text-accent text-xs font-bold text-center tracking-widest mb-2">Weekly Task</p>
 
-      <div className="grid grid-cols-7 gap-1.5">
-        {weekDates.map((date, i) => {
-          const dateStr   = date.toISOString().slice(0, 10);
-          const dayTasks  = tasks.filter(t => t.due_date === dateStr);
-          const isToday   = dateStr === todayStr;
-          const isWeekend = i >= 5;
+      <ul className="flex flex-col gap-1 flex-1 overflow-y-auto">
+        {tasks.map(task => (
+          <li key={task.id} className="flex items-center gap-2 group cursor-pointer" onClick={() => toggle(task)}>
+            <span className="text-gray-500 text-sm">📄</span>
+            <span className={`text-xs flex-1 ${task.is_completed ? "line-through text-gray-600" : "text-accent"}`}>
+              {task.title}
+            </span>
+            <button
+              onClick={e => { e.stopPropagation(); remove(task.id); }}
+              className="opacity-0 group-hover:opacity-100 text-gray-700 hover:text-red-400 text-xs transition-all"
+            >✕</button>
+          </li>
+        ))}
+        {tasks.length === 0 && !adding && (
+          <li className="text-gray-700 text-xs">タスクなし</li>
+        )}
+      </ul>
 
-          return (
-            <div
-              key={dateStr}
-              className={`rounded-lg p-2 flex flex-col gap-1 min-h-[100px] border ${
-                isToday ? "border-accent bg-accent/5" : "border-card-border"
-              }`}
-            >
-              <div className="text-center">
-                <p className={`text-xs font-semibold ${isWeekend ? "text-red-400" : "text-gray-400"}`}>
-                  {DAY_LABELS[i]}
-                </p>
-                <p className={`text-sm font-bold ${isToday ? "text-accent" : "text-white"}`}>
-                  {date.getDate()}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-0.5 flex-1">
-                {dayTasks.map(task => (
-                  <div key={task.id} className="group flex items-start gap-1">
-                    <button
-                      onClick={() => toggle(task)}
-                      className={`mt-0.5 w-3 h-3 rounded border flex-shrink-0 flex items-center justify-center transition-colors ${
-                        task.is_completed ? "bg-accent border-accent" : "border-gray-600 hover:border-accent"
-                      }`}
-                    >
-                      {task.is_completed && <div className="w-1.5 h-1.5 rounded-sm bg-white" />}
-                    </button>
-                    <span
-                      onClick={() => remove(task.id)}
-                      className={`text-xs leading-tight cursor-pointer ${
-                        task.is_completed ? "line-through text-gray-600" : "text-gray-300 group-hover:text-red-400"
-                      }`}
-                    >
-                      {task.title}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {adding === dateStr ? (
-                <input
-                  autoFocus value={newTitle}
-                  onChange={e => setNewTitle(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === "Enter") add(dateStr);
-                    if (e.key === "Escape") { setAdding(null); setNewTitle(""); }
-                  }}
-                  onBlur={() => { if (!newTitle.trim()) { setAdding(null); } }}
-                  placeholder="タスク"
-                  className="text-xs bg-card-border/30 border border-accent/50 rounded px-1 py-0.5 text-white w-full placeholder-gray-700"
-                />
-              ) : (
-                <button
-                  onClick={() => { setAdding(dateStr); setNewTitle(""); }}
-                  className="text-gray-700 hover:text-accent text-xs transition-colors text-left"
-                >
-                  +
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {adding ? (
+        <div className="flex gap-1.5 mt-1">
+          <input
+            autoFocus value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(false); }}
+            placeholder="タスク名"
+            className="flex-1 text-xs border-b border-accent/40 text-white placeholder-gray-700 py-0.5"
+          />
+          <button onClick={add} className="text-xs text-accent">追加</button>
+        </div>
+      ) : (
+        <button onClick={() => setAdding(true)} className="add-btn mt-1">
+          <span className="text-base leading-none">+</span>
+          <span className="text-xs">Add Task</span>
+        </button>
+      )}
     </div>
   );
 }

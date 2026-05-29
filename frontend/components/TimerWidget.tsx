@@ -2,9 +2,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const PRESETS = [
-  { label: "25 min", seconds: 25 * 60 },
-  { label: "30 min", seconds: 30 * 60 },
-  { label: "1 hour", seconds: 60 * 60 },
+  { label: "30min", seconds: 30 * 60 },
+  { label: "1hour", seconds: 60 * 60 },
 ];
 
 export default function TimerWidget() {
@@ -14,8 +13,7 @@ export default function TimerWidget() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const clear = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
+    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
   };
 
   const start = useCallback(() => {
@@ -23,80 +21,75 @@ export default function TimerWidget() {
     setRunning(true);
     intervalRef.current = setInterval(() => {
       setRemaining(prev => {
-        if (prev <= 1) {
-          clear();
-          setRunning(false);
-          return 0;
-        }
+        if (prev <= 1) { clear(); setRunning(false); return 0; }
         return prev - 1;
       });
     }, 1000);
-  }, [remaining]);
+  }, [remaining]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const pause = () => { clear(); setRunning(false); };
   const reset = (secs: number) => { clear(); setRunning(false); setTotalSeconds(secs); setRemaining(secs); };
 
-  useEffect(() => () => clear(), []);
+  useEffect(() => () => clear(), []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pct = totalSeconds > 0 ? (remaining / totalSeconds) * 100 : 0;
-  const mm  = String(Math.floor(remaining / 60)).padStart(2, "0");
-  const ss  = String(remaining % 60).padStart(2, "0");
-
-  const r = 36;
-  const circ = 2 * Math.PI * r;
-  const dash = (pct / 100) * circ;
+  const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
+  const ss = String(remaining % 60).padStart(2, "0");
 
   return (
-    <div className="widget items-center gap-4">
-      <p className="widget-title self-start">FOCUS TIMER</p>
-
-      <div className="relative w-28 h-28">
-        <svg className="w-28 h-28 -rotate-90" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r={r} fill="none" stroke="#2a2a2a" strokeWidth="6" />
-          <circle
-            cx="44" cy="44" r={r} fill="none"
-            stroke="#7B2FBE" strokeWidth="6"
-            strokeDasharray={`${dash} ${circ}`}
-            strokeLinecap="round"
-            style={{ transition: "stroke-dasharray 0.5s linear" }}
-          />
-        </svg>
-        <span className="absolute inset-0 flex items-center justify-center font-mono text-xl font-bold">
-          {mm}:{ss}
-        </span>
+    <div className="border border-[#3a2a50] rounded-xl p-4 flex flex-col items-center gap-3 bg-[#0a0818]/60">
+      {/* Time display */}
+      <div className="text-5xl font-black text-white tracking-tight font-mono">
+        {mm} : {ss}
       </div>
 
-      <div className="flex gap-2">
+      {/* Play / Stop buttons */}
+      <div className="flex gap-6">
+        <button
+          onClick={running ? pause : start}
+          disabled={remaining === 0}
+          className="w-9 h-9 flex items-center justify-center border border-gray-600 rounded-full hover:border-accent transition-colors"
+        >
+          {running ? (
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="white">
+              <rect x="2" y="2" width="4" height="10" rx="1"/>
+              <rect x="8" y="2" width="4" height="10" rx="1"/>
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="white">
+              <path d="M3 2L12 7L3 12V2Z"/>
+            </svg>
+          )}
+        </button>
+        <button
+          onClick={() => reset(totalSeconds)}
+          className="w-9 h-9 flex items-center justify-center border border-gray-600 rounded hover:border-accent transition-colors"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="white">
+            <rect x="1" y="1" width="10" height="10" rx="1"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Presets */}
+      <div className="flex items-center gap-3 text-sm">
         {PRESETS.map(p => (
           <button
             key={p.label}
             onClick={() => reset(p.seconds)}
-            className={`text-xs px-2 py-1 rounded-lg border transition-colors ${
-              totalSeconds === p.seconds
-                ? "border-accent text-accent"
-                : "border-card-border text-gray-400 hover:border-accent-light"
+            className={`transition-colors ${
+              totalSeconds === p.seconds ? "text-accent font-bold" : "text-gray-400 hover:text-accent-light"
             }`}
           >
             {p.label}
           </button>
         ))}
+        <button className="text-gray-500 hover:text-gray-300 transition-colors text-lg leading-none">+</button>
       </div>
 
-      <div className="flex gap-2">
-        {running ? (
-          <button onClick={pause} className="btn-accent px-6">Pause</button>
-        ) : (
-          <button onClick={start} className="btn-accent px-6" disabled={remaining === 0}>
-            {remaining === totalSeconds ? "Start" : "Resume"}
-          </button>
-        )}
-        <button
-          onClick={() => reset(totalSeconds)}
-          className="text-xs px-4 py-1.5 rounded-lg border border-card-border text-gray-400 hover:border-gray-500 transition-colors"
-        >
-          Reset
-        </button>
-      </div>
+      {/* FOCUS TIMER label */}
+      <p className="text-red-500 font-black tracking-widest text-sm">
+        FOCUS TIMER 🔥
+      </p>
     </div>
   );
 }

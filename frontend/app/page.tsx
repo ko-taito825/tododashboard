@@ -11,53 +11,58 @@ import WeeklyTask from "@/components/WeeklyTask";
 
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen bg-bg p-6">
-      {/* Header */}
-      <header className="mb-6 flex items-center justify-between border-b border-card-border pb-4">
-        <h1 className="text-3xl font-bold tracking-[0.3em] text-white uppercase">
-          Dashboard
-        </h1>
-        <p className="text-xs text-gray-600 tracking-widest uppercase">
-          Personal Productivity
-        </p>
-      </header>
+    <div className="flex min-h-screen bg-[#0C0C0C] text-white">
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-12 gap-4">
+      {/* ── Main content (left) ── */}
+      <div className="flex-1 min-w-0 flex flex-col">
 
-        {/* ── Left column (col 1-3): Routines + Habit ── */}
-        <div className="col-span-3 flex flex-col gap-4">
-          <RoutineWidget category="morning_routine" title="Morning Routine" />
-          <RoutineWidget category="night_routine"   title="Night Routine"   />
-          <TodaysHabit />
+        {/* Hero */}
+        <div
+          className="h-48 w-full bg-[#0d0820] shrink-0"
+          style={{
+            backgroundImage: "url('/hero.png')",
+            backgroundSize: "100% auto",
+            backgroundPosition: "top center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+
+        {/* DASHBOARD title */}
+        <div className="px-8 pt-5 pb-2">
+          <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
+          <hr className="mt-2 border-gray-700" />
         </div>
 
-        {/* ── Middle column (col 4-8): Tasks + Memo ── */}
-        <div className="col-span-5 flex flex-col gap-4">
-          <div className="flex-1">
-            <TodaysTasks />
+        {/* Content grid: Routines | Habit | Tasks */}
+        <div className="px-8 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
+          <div className="flex flex-col gap-6">
+            <RoutineWidget category="morning_routine" title="MORNING ROUTINE" icon="sun" />
+            <RoutineWidget category="night_routine"   title="NIGHT ROUTINE"   icon="moon" />
           </div>
+          <TodaysHabit />
+          <TodaysTasks />
+        </div>
+
+        {/* Cards row: Memo | Weather | Weekly Task */}
+        <div className="px-8 mt-6 grid grid-cols-3 gap-4">
           <MemoWidget />
-        </div>
-
-        {/* ── Right column (col 9-12): Clock + Timer + Weather + Progress ── */}
-        <div className="col-span-4 flex flex-col gap-4">
-          <CurrentTime />
-          <TimerWidget />
           <WeatherWidget />
-          <ProgressWidget />
-        </div>
-
-        {/* ── Bottom: Weekly Task (full width) ── */}
-        <div className="col-span-12">
           <WeeklyTask />
         </div>
 
-        {/* ── Bottom: Monthly Agenda (full width) ── */}
-        <div className="col-span-12">
+        {/* Bottom: Progress | Monthly Agenda */}
+        <div className="px-8 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
+          <ProgressWidget />
           <MonthlyAgenda />
         </div>
       </div>
-    </main>
+
+      {/* ── Right sidebar: Clock + Timer ── */}
+      <div className="w-[220px] shrink-0 flex flex-col gap-4 px-3 pt-0">
+        <CurrentTime />
+        <TimerWidget />
+      </div>
+
+    </div>
   );
 }

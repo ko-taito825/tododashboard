@@ -26,20 +26,17 @@ export default function MemoWidget() {
   };
 
   return (
-    <div className="widget h-full">
-      <div className="flex items-center justify-between">
-        <p className="widget-title">MEMO</p>
-        <span className={`text-xs transition-colors ${saved ? "text-gray-600" : "text-accent"}`}>
-          {saved ? "保存済み" : "保存中..."}
-        </span>
-      </div>
+    <div className="data-card flex flex-col h-40">
+      <p className="text-accent text-xs font-bold text-center tracking-widest mb-2">MEMO</p>
       <textarea
         value={content}
         onChange={e => handleChange(e.target.value)}
-        placeholder="今日のメモを書こう..."
-        className="flex-1 w-full bg-transparent text-sm text-gray-300 placeholder-gray-600 resize-none leading-relaxed focus:outline-none"
-        rows={8}
+        placeholder="メモを入力..."
+        className="flex-1 w-full bg-transparent text-xs text-gray-300 placeholder-gray-700 resize-none leading-relaxed focus:outline-none"
       />
+      <p className={`text-[10px] text-right mt-1 transition-colors ${saved ? "text-gray-700" : "text-accent"}`}>
+        {saved ? "保存済み" : "保存中..."}
+      </p>
     </div>
   );
 }
