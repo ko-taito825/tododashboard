@@ -13,14 +13,14 @@ export default function CurrentTime() {
   const mm = String(now.getMinutes()).padStart(2, "0");
 
   return (
-    <div className="flex gap-2 pt-2 justify-center">
+    <div className="flex gap-2">
       {[hh, mm].map((val, i) => (
         <div
           key={i}
-          className="bg-accent rounded-lg flex items-center justify-center"
-          style={{ width: 100, height: 100 }}
+          className="bg-accent rounded-xl flex items-center justify-center"
+          style={{ width: 110, height: 110 }}
         >
-          <span className="text-white font-black text-5xl leading-none tracking-tight">
+          <span className="text-white font-black leading-none tracking-tighter" style={{ fontSize: 64 }}>
             {val}
           </span>
         </div>
