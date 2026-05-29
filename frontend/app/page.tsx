@@ -31,17 +31,17 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ── DASHBOARD title (full width so hr reaches under the clock) ── */}
+      <div className="px-8 pt-5 pb-0">
+        <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
+      </div>
+      <hr className="mt-2 border-gray-700" />
+
       {/* ── Content area + Timer sidebar ── */}
       <div className="flex">
 
         {/* Left: Dashboard content */}
         <div className="flex-1 min-w-0">
-          {/* DASHBOARD title */}
-          <div className="px-8 pt-5 pb-2">
-            <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
-            <hr className="mt-2 border-gray-700" />
-          </div>
-
           {/* Content grid: Routines | Habit | Tasks */}
           <div className="px-8 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
             <div className="flex flex-col gap-6">
@@ -60,8 +60,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Right: Timer sidebar — pt offsets the clock that extends 55px below hero */}
-        <div className="w-[230px] shrink-0 px-3 pt-16">
+        {/* Right: Timer sidebar — pt pushes timer below the clock + header area */}
+        <div className="w-[230px] shrink-0 px-3 pt-24">
           <TimerWidget />
         </div>
       </div>
