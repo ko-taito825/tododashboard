@@ -1,18 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
-        "bg-dark": "#121212",
-        "card-dark": "#1C1C24",
-        "primary-purple": "#8B5CF6",
-      },
-      backgroundImage: {
-        "dashboard-hero": "url('/src/assets/hero-bg.png')", // 画像のファイル名に合わせて変更してください
-      },
-      fontFamily: {
-        inter: ["Inter", "sans-serif"],
+        bg: "#0C0C0C",
+        card: "#141414",
+        "card-border": "#2a2a2a",
+        accent: "#7B2FBE",
+        "accent-light": "#9D4EDD",
       },
     },
   },
