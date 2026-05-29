@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
       {/* ── Hero (full width, no clock overlay) ── */}
       <div
-        className="h-[175px] w-full"
+        className="h-[280px] w-full"
         style={{
           backgroundImage: "url('/hero.png')",
           backgroundSize: "100% auto",
