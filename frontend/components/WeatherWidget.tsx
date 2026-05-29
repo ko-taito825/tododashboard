@@ -54,46 +54,24 @@ export default function WeatherWidget() {
   }, []);
 
   return (
-    <div className="widget">
-      <p className="widget-title">WEATHER INFO</p>
+    <div className="data-card flex flex-col h-40">
+      <p className="text-accent text-xs font-bold text-center tracking-widest mb-2">Wether Info</p>
 
-      {loading && (
-        <div className="flex items-center justify-center h-24 text-gray-500 text-sm">
-          取得中...
-        </div>
-      )}
-
-      {error && (
-        <div className="text-yellow-400 text-xs text-center py-4">{error}</div>
-      )}
+      {loading && <p className="text-gray-600 text-xs text-center mt-4">取得中...</p>}
+      {error   && <p className="text-yellow-500 text-xs text-center mt-2">{error}</p>}
 
       {weather && (
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400 text-xs">{weather.city}</p>
-              <p className="text-4xl font-bold">{weather.temp}°C</p>
-              <p className="text-gray-400 text-xs capitalize mt-0.5">{weather.description}</p>
-            </div>
-            <img
-              src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-              alt={weather.description}
-              className="w-16 h-16"
-            />
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">☀</span>
+            <span className="text-xl font-bold text-white">{weather.temp}℃</span>
+            <span className="text-sm text-gray-300">{weather.city}</span>
           </div>
-          <div className="grid grid-cols-3 gap-1 text-center text-xs text-gray-400 border-t border-card-border pt-2">
-            <div>
-              <p className="text-white font-semibold">{weather.feels_like}°</p>
-              <p>体感</p>
-            </div>
-            <div>
-              <p className="text-white font-semibold">{weather.humidity}%</p>
-              <p>湿度</p>
-            </div>
-            <div>
-              <p className="text-white font-semibold">{weather.wind_speed}m/s</p>
-              <p>風速</p>
-            </div>
+          <p className="text-xs text-gray-400 capitalize">{weather.description}</p>
+          <div className="flex gap-3 text-xs text-gray-500 mt-1">
+            <span>体感 {weather.feels_like}°</span>
+            <span>湿度 {weather.humidity}%</span>
+            <span>風速 {weather.wind_speed}m/s</span>
           </div>
         </div>
       )}
