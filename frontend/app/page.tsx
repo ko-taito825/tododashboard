@@ -13,38 +13,32 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#0C0C0C] text-white">
 
-      {/* ── Hero (full width) with clock overlaid ── */}
-      <div className="relative">
-        <div
-          className="h-[175px] w-full"
-          style={{
-            backgroundImage: "url('/hero.png')",
-            backgroundSize: "100% auto",
-            backgroundPosition: "top center",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: "#0d0820",
-          }}
-        />
-        {/* Clock: positioned just below the hero, aligned to top-right */}
-        <div className="absolute right-4" style={{ bottom: "-65px" }}>
-          <CurrentTime />
-        </div>
-      </div>
+      {/* ── Hero (full width, no clock overlay) ── */}
+      <div
+        className="h-[175px] w-full"
+        style={{
+          backgroundImage: "url('/hero.png')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "top center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#0d0820",
+        }}
+      />
 
-      {/* ── DASHBOARD title (full width so hr reaches under the clock) ── */}
-      <div className="px-8 pt-5 pb-0">
+      {/* ── DASHBOARD title + hr (full width, px-12 indent) ── */}
+      <div className="px-12 pt-5 pb-0">
         <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
       </div>
-      {/* hr: left=px-8 indent, right stops at clock center (16px margin + 130px block + 4px half-gap = 150px) */}
-      <hr className="mt-2 border-gray-700 ml-8" style={{ marginRight: "150px" }} />
+      {/* hr ends at clock center: sidebar(300px) - px-4(16) - block(130) - half-gap(4) = 150px from right */}
+      <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "150px" }} />
 
-      {/* ── Content area + Timer sidebar ── */}
+      {/* ── Content + Right sidebar ── */}
       <div className="flex">
 
-        {/* Left: Dashboard content */}
+        {/* Left content */}
         <div className="flex-1 min-w-0">
           {/* Content grid: Routines | Habit | Tasks */}
-          <div className="px-8 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
+          <div className="px-12 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
             <div className="flex flex-col gap-6">
               <RoutineWidget category="morning_routine" title="MORNING ROUTINE" icon="sun" />
               <RoutineWidget category="night_routine"   title="NIGHT ROUTINE"   icon="moon" />
@@ -54,21 +48,27 @@ export default function DashboardPage() {
           </div>
 
           {/* Cards row: Memo | Weather | Weekly Task */}
-          <div className="px-8 mt-6 grid grid-cols-3 gap-4">
+          <div className="px-12 mt-6 grid grid-cols-3 gap-4">
             <MemoWidget />
             <WeatherWidget />
             <WeeklyTask />
           </div>
         </div>
 
-        {/* Right: Timer sidebar — pt pushes timer below the clock (130px) + gap */}
-        <div className="w-[280px] shrink-0 px-3 pt-[155px]">
-          <TimerWidget />
+        {/* Right sidebar: Clock aligned with content grid, Timer below */}
+        <div className="w-[300px] shrink-0 flex flex-col px-4">
+          {/* pt aligns clock top with content grid (title+hr height ≈ 85px) */}
+          <div style={{ paddingTop: "85px" }}>
+            <CurrentTime />
+          </div>
+          <div className="mt-4">
+            <TimerWidget />
+          </div>
         </div>
       </div>
 
       {/* ── Full-width bottom: Progress + Monthly Agenda ── */}
-      <div className="px-8 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
+      <div className="px-12 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
         <ProgressWidget />
         <MonthlyAgenda />
       </div>
