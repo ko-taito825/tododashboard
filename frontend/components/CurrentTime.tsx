@@ -18,9 +18,9 @@ export default function CurrentTime() {
         <div
           key={i}
           className="bg-accent rounded-xl flex items-center justify-center"
-          style={{ width: 130, height: 130 }}
+          style={{ width: 148, height: 148 }}
         >
-          <span className="text-white font-black leading-none tracking-tighter" style={{ fontSize: 76 }}>
+          <span className="text-white font-black leading-none tracking-tighter" style={{ fontSize: 88 }}>
             {val}
           </span>
         </div>

@@ -57,9 +57,7 @@ export default function DashboardPage() {
 
         {/* Right sidebar: Clock at same level as content grid (mt-5 matches grid) */}
         <div className="w-[300px] shrink-0 flex flex-col px-4">
-          <div className="mt-5">
-            <CurrentTime />
-          </div>
+          <CurrentTime />
           <div className="mt-4">
             <TimerWidget />
           </div>
