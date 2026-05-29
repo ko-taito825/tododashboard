@@ -38,8 +38,10 @@ export default function TimerWidget() {
   return (
     <div className="border border-[#3a2a50] rounded-xl p-4 flex flex-col items-center gap-3 bg-[#0a0818]/60">
       {/* Time display */}
-      <div className="text-5xl font-black text-white tracking-tight font-mono">
-        {mm} : {ss}
+      <div className="flex items-center justify-center gap-1 font-black text-white font-mono whitespace-nowrap">
+        <span className="text-5xl tracking-tight">{mm}</span>
+        <span className="text-4xl text-gray-400">:</span>
+        <span className="text-5xl tracking-tight">{ss}</span>
       </div>
 
       {/* Play / Stop buttons */}
