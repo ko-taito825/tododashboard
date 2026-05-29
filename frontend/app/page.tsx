@@ -16,7 +16,7 @@ export default function DashboardPage() {
       {/* ── Hero (full width) with clock overlaid ── */}
       <div className="relative">
         <div
-          className="h-[220px] w-full"
+          className="h-[175px] w-full"
           style={{
             backgroundImage: "url('/hero.png')",
             backgroundSize: "100% auto",
@@ -25,8 +25,8 @@ export default function DashboardPage() {
             backgroundColor: "#0d0820",
           }}
         />
-        {/* Clock: straddling the hero bottom edge */}
-        <div className="absolute right-4" style={{ bottom: "-55px" }}>
+        {/* Clock: positioned just below the hero, aligned to top-right */}
+        <div className="absolute right-4" style={{ bottom: "-65px" }}>
           <CurrentTime />
         </div>
       </div>
@@ -35,7 +35,8 @@ export default function DashboardPage() {
       <div className="px-8 pt-5 pb-0">
         <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
       </div>
-      <hr className="mt-2 border-gray-700" />
+      {/* hr: left=px-8 indent, right stops at clock center (16px margin + 130px block + 4px half-gap = 150px) */}
+      <hr className="mt-2 border-gray-700 ml-8" style={{ marginRight: "150px" }} />
 
       {/* ── Content area + Timer sidebar ── */}
       <div className="flex">
@@ -60,8 +61,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Right: Timer sidebar — pt pushes timer below the clock + header area */}
-        <div className="w-[230px] shrink-0 px-3 pt-24">
+        {/* Right: Timer sidebar — pt pushes timer below the clock (130px) + gap */}
+        <div className="w-[280px] shrink-0 px-3 pt-[155px]">
           <TimerWidget />
         </div>
       </div>
