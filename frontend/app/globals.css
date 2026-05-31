@@ -17,6 +17,62 @@ body {
 
 input, textarea { background: transparent; outline: none; }
 
+/* ── Hero pixel-art animations ───────────────────────── */
+
+/* Study Zone: typing – left/right hands alternate */
+@keyframes px-type-l {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-4px); }
+}
+@keyframes px-type-r {
+  from { transform: translateY(-4px); }
+  to   { transform: translateY(0px); }
+}
+
+/* Workout Zone: dumbbell curl up → hold → down */
+@keyframes px-curl {
+  0%   { transform: translateY(0px); }
+  35%  { transform: translateY(-11px); }
+  55%  { transform: translateY(-11px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Bar Zone: bartender arm extends toward customer */
+@keyframes px-serve {
+  0%, 20%, 75%, 100% { transform: translateX(0); }
+  35%, 65%           { transform: translateX(13px); }
+}
+
+/* Bar Zone: customer cup lifts and tilts */
+@keyframes px-sip {
+  0%, 15%, 70%, 100% { transform: translateY(0) rotate(0deg); }
+  30%, 60%           { transform: translateY(-9px) rotate(-14deg); }
+}
+
+/* Shared pixel-art element classes */
+.px-hand-l {
+  width: 13px; height: 5px; background: #C48C5E;
+  image-rendering: pixelated;
+  animation: px-type-l 0.38s steps(1, end) alternate infinite;
+}
+.px-hand-r {
+  width: 13px; height: 5px; background: #C48C5E;
+  image-rendering: pixelated;
+  animation: px-type-r 0.38s steps(1, end) alternate infinite;
+}
+.px-dumbbell {
+  image-rendering: pixelated;
+  animation: px-curl 1.8s steps(4, end) infinite;
+}
+.px-serve {
+  image-rendering: pixelated;
+  animation: px-serve 3s steps(3, end) infinite;
+}
+.px-cup {
+  image-rendering: pixelated;
+  animation: px-sip 3s steps(3, end) infinite 0.9s;
+}
+
 @layer components {
   /* Section header with underline */
   .section-header {

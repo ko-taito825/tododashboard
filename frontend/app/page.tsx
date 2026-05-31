@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CurrentTime from "@/components/CurrentTime";
+import HeroAnimation from "@/components/HeroAnimation";
 import UserMenu from "@/components/UserMenu";
 import MemoWidget from "@/components/MemoWidget";
 import MonthlyAgenda from "@/components/MonthlyAgenda";
@@ -15,9 +16,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#0C0C0C] text-white">
 
-      {/* ── Hero (full width, no clock overlay) ── */}
+      {/* ── Hero (full width) + pixel-art animations ── */}
       <div
-        className="h-[280px] w-full"
+        className="h-[280px] w-full relative overflow-hidden"
         style={{
           backgroundImage: "url('/hero.png')",
           backgroundSize: "100% auto",
@@ -25,7 +26,9 @@ export default function DashboardPage() {
           backgroundRepeat: "no-repeat",
           backgroundColor: "#0d0820",
         }}
-      />
+      >
+        <HeroAnimation />
+      </div>
 
       {/* ── DASHBOARD title + hr (full width, px-12 indent) ── */}
       <div className="px-12 pt-5 pb-0 flex items-center justify-between">
