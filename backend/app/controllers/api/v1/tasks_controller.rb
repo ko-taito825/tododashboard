@@ -8,7 +8,8 @@ module Api
 
         tasks = case params[:filter]
         when "today"
-          tasks.for_date(Date.today)
+          date = params[:date].present? ? Date.parse(params[:date]) : Date.today
+          tasks.for_date(date)
         when "week"
           week_start = params[:week_start] ? Date.parse(params[:week_start]) : Date.today.beginning_of_week(:monday)
           tasks.for_week(week_start)

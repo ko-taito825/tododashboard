@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CurrentTime from "@/components/CurrentTime";
 import MemoWidget from "@/components/MemoWidget";
 import MonthlyAgenda from "@/components/MonthlyAgenda";
@@ -26,8 +27,11 @@ export default function DashboardPage() {
       />
 
       {/* ── DASHBOARD title + hr (full width, px-12 indent) ── */}
-      <div className="px-12 pt-5 pb-0">
+      <div className="px-12 pt-5 pb-0 flex items-baseline gap-6">
         <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
+        <Link href="/history" className="text-xs text-gray-500 hover:text-accent transition-colors tracking-widest uppercase">
+          History →
+        </Link>
       </div>
       {/* hr: spans only the content area, stops at sidebar left edge (300px from right) */}
       <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "300px" }} />
