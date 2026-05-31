@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import DayDetail from "@/components/history/DayDetail";
 import HistoryCalendar from "@/components/history/HistoryCalendar";
+import UserMenu from "@/components/UserMenu";
 
 export default function HistoryPageContent() {
   const searchParams  = useSearchParams();
@@ -17,14 +18,17 @@ export default function HistoryPageContent() {
     <div className="min-h-screen bg-[#0C0C0C] text-white">
 
       {/* Header */}
-      <header className="px-12 pt-6 pb-4 flex items-center gap-6 border-b border-gray-800">
-        <Link
-          href="/"
-          className="text-gray-500 hover:text-accent transition-colors text-sm flex items-center gap-1"
-        >
-          ← Dashboard
-        </Link>
-        <h1 className="text-2xl font-black tracking-[0.3em] text-white">HISTORY</h1>
+      <header className="px-12 pt-6 pb-4 flex items-center justify-between border-b border-gray-800">
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="text-gray-500 hover:text-accent transition-colors text-sm flex items-center gap-1"
+          >
+            ← Dashboard
+          </Link>
+          <h1 className="text-2xl font-black tracking-[0.3em] text-white">HISTORY</h1>
+        </div>
+        <UserMenu />
       </header>
 
       {/* Main layout */}
