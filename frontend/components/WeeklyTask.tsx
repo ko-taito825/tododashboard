@@ -3,6 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { createTask, deleteTask, getTasks, updateTask } from "@/lib/api";
 import type { Task } from "@/types";
 
+const EV = "tasks-changed";
+const notify = () => window.dispatchEvent(new CustomEvent(EV));
+
 function getWeekStart() {
   const d = new Date();
   const day = d.getDay();
@@ -24,22 +27,40 @@ export default function WeeklyTask() {
 
   useEffect(() => { load(); }, [load]);
 
+  // Reload when another component mutates tasks
+  useEffect(() => {
+    window.addEventListener(EV, load);
+    return () => window.removeEventListener(EV, load);
+  }, [load]);
+
   const add = async () => {
     if (!newTitle.trim()) return;
     const today = new Date().toISOString().slice(0, 10);
     const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false });
     setTasks(prev => [...prev, t]);
     setNewTitle(""); setAdding(false);
+    notify();
   };
 
   const toggle = async (task: Task) => {
-    const updated = await updateTask(task.id, { is_completed: !task.is_completed });
-    setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
+    try {
+      const updated = await updateTask(task.id, { is_completed: !task.is_completed });
+      setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
+      notify();
+    } catch {
+      // Task deleted by another component — remove from local state
+      setTasks(prev => prev.filter(t => t.id !== task.id));
+    }
   };
 
   const remove = async (id: number) => {
-    await deleteTask(id);
     setTasks(prev => prev.filter(t => t.id !== id));
+    try {
+      await deleteTask(id);
+      notify();
+    } catch {
+      load();
+    }
   };
 
   return (
