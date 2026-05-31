@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const PRESETS = [
+  { label: "15min", seconds: 15 * 60 },
   { label: "30min", seconds: 30 * 60 },
   { label: "1hour", seconds: 60 * 60 },
 ];
