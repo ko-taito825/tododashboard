@@ -6,6 +6,8 @@ module Api
       def index
         tasks = current_user.tasks.order(due_date: :asc, created_at: :asc)
 
+        tasks = tasks.where(task_category: params[:task_category]) if params[:task_category].present?
+
         tasks = case params[:filter]
         when "today"
           date = params[:date].present? ? Date.parse(params[:date]) : Date.today
@@ -53,7 +55,7 @@ module Api
       end
 
       def task_params
-        params.require(:task).permit(:title, :description, :due_date, :is_completed)
+        params.require(:task).permit(:title, :description, :due_date, :is_completed, :task_category)
       end
     end
   end

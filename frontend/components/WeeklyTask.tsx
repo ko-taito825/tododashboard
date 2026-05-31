@@ -21,7 +21,7 @@ export default function WeeklyTask() {
   const [newTitle, setNewTitle] = useState("");
 
   const load = useCallback(async () => {
-    const data = await getTasks("week", { week_start: getWeekStart() });
+    const data = await getTasks("week", { week_start: getWeekStart(), task_category: "1" });
     setTasks(data);
   }, []);
 
@@ -36,7 +36,7 @@ export default function WeeklyTask() {
   const add = async () => {
     if (!newTitle.trim()) return;
     const today = new Date().toISOString().slice(0, 10);
-    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false });
+    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false, task_category: "scheduled" });
     setTasks(prev => [...prev, t]);
     setNewTitle(""); setAdding(false);
     notify();

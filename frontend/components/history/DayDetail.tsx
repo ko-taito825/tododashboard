@@ -92,7 +92,7 @@ export default function DayDetail({ date }: { date: string }) {
       getHabits("night_routine"),
       getHabits("general"),
       getHabitLogs(date),
-      getTasks("today", { date }),
+      getTasks("today", { date }), // no task_category → all categories
       getDailyMemo(date),
     ]).then(([morning, night, general, logs, tasks, memo]) => {
       if (!cancelled) {

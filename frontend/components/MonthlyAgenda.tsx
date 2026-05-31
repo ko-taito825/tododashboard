@@ -31,6 +31,7 @@ export default function MonthlyAgenda() {
   const load = useCallback(async () => {
     const data = await getTasks("month", {
       year: String(viewDate.year), month: String(viewDate.month),
+      task_category: "1",
     });
     setTasks(data);
   }, [viewDate]);
@@ -42,7 +43,7 @@ export default function MonthlyAgenda() {
 
   const addTask = async (dateStr: string) => {
     if (!newTitle.trim()) return;
-    const t = await createTask({ title: newTitle.trim(), due_date: dateStr, is_completed: false });
+    const t = await createTask({ title: newTitle.trim(), due_date: dateStr, is_completed: false, task_category: "scheduled" });
     setTasks(prev => [...prev, t]);
     setNewTitle("");
   };

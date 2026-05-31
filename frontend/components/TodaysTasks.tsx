@@ -13,7 +13,7 @@ export default function TodaysTasks() {
   const today = new Date().toISOString().slice(0, 10);
 
   const load = useCallback(async () => {
-    const data = await getTasks("today");
+    const data = await getTasks("today", { task_category: "0" });
     setTasks(data);
   }, []);
 
@@ -27,7 +27,7 @@ export default function TodaysTasks() {
 
   const add = async () => {
     if (!newTitle.trim()) return;
-    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false });
+    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false, task_category: "daily" });
     setTasks(prev => [...prev, t]);
     setNewTitle("");
     setAdding(false);
