@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       namespace :progress do
         get :weekly
       end
+      resources :weekly_reviews, only: [:index, :create]
     end
   end
 

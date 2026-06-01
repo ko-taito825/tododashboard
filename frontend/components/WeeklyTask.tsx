@@ -77,7 +77,7 @@ export default function WeeklyTask() {
           <input
             autoFocus value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
-            onKeyDown={e => { if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(false); }}
+            onKeyDown={e => { if (e.isComposing || e.nativeEvent.isComposing) return; if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(false); }}
             placeholder="タスク名"
             className="flex-1 text-xs border-b border-accent/40 text-white placeholder-gray-700 py-0.5"
           />

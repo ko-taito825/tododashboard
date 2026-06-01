@@ -67,3 +67,14 @@ export const getWeeklyProgress = (weekStart?: string) =>
   request<import("@/types").ProgressData[]>(
     `/progress/weekly${weekStart ? `?week_start=${weekStart}` : ""}`
   );
+
+// --- Weekly Reviews ---
+export const getWeeklyReviews = () =>
+  fetch("/api/weekly-review").then(r => r.json()) as Promise<import("@/types").WeeklyReview[]>;
+
+export const generateWeeklyReview = (weekStart: string) =>
+  fetch("/api/weekly-review", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ week_start: weekStart }),
+  }).then(r => r.json()) as Promise<import("@/types").WeeklyReview>;
