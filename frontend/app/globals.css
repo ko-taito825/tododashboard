@@ -17,6 +17,11 @@ body {
 
 input, textarea { background: transparent; outline: none; }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 0.7; }
+}
+
 
 @layer components {
   /* Section header with underline */
