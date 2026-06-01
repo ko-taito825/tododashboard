@@ -7,27 +7,30 @@ const PRESETS = [
   { label: "1hour", seconds: 60 * 60 },
 ];
 
-/** フラッシュオーバーレイ: フェードイン → 待機 → フェードアウト */
+/** フラッシュオーバーレイ: フェードイン → クリックするまで表示 → フェードアウト */
 function TimerFlash({ onDismiss }: { onDismiss: () => void }) {
   const [phase, setPhase] = useState<"in" | "hold" | "out">("in");
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("hold"), 600);   // フェードイン完了
-    const t2 = setTimeout(() => setPhase("out"),  1400);  // 待機後フェードアウト開始
-    const t3 = setTimeout(() => onDismiss(),       2200); // アニメーション完了 → 消す
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, [onDismiss]);
+    const t1 = setTimeout(() => setPhase("hold"), 600); // フェードイン完了
+    return () => clearTimeout(t1);
+  }, []);
+
+  const dismiss = () => {
+    setPhase("out");
+    setTimeout(() => onDismiss(), 600); // フェードアウト完了後に消す
+  };
 
   const opacity =
     phase === "in"   ? "opacity-0 animate-[fadeIn_0.6s_ease_forwards]"
     : phase === "hold" ? "opacity-70"
-    : "opacity-0 transition-opacity duration-700";
+    : "opacity-0 transition-opacity duration-[600ms]";
 
   return (
     <div
       className={`fixed inset-0 z-50 cursor-pointer ${opacity}`}
       style={{ backgroundColor: "#7B2FBE" }}
-      onClick={onDismiss}
+      onClick={dismiss}
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none">
         <p className="text-white text-5xl font-black tracking-widest">TIME&apos;S UP</p>
