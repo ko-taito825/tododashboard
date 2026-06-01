@@ -3,9 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { createTask, deleteTask, getTasks, updateTask } from "@/lib/api";
 import type { Task } from "@/types";
 
-const EV = "tasks-changed";
-const notify = () => window.dispatchEvent(new CustomEvent(EV));
-
 export default function TodaysTasks() {
   const [tasks, setTasks]     = useState<Task[]>([]);
   const [adding, setAdding]   = useState(false);
@@ -19,40 +16,29 @@ export default function TodaysTasks() {
 
   useEffect(() => { load(); }, [load]);
 
-  // Reload when another component mutates tasks
-  useEffect(() => {
-    window.addEventListener(EV, load);
-    return () => window.removeEventListener(EV, load);
-  }, [load]);
-
   const add = async () => {
     if (!newTitle.trim()) return;
     const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false, task_category: "daily" });
     setTasks(prev => [...prev, t]);
     setNewTitle("");
     setAdding(false);
-    notify();
   };
 
   const toggle = async (task: Task) => {
     try {
       const updated = await updateTask(task.id, { is_completed: !task.is_completed });
       setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
-      notify();
     } catch {
-      // Task deleted by another component — remove from local state
       setTasks(prev => prev.filter(t => t.id !== task.id));
     }
   };
 
   const remove = async (id: number) => {
-    // Optimistic update first so the UI responds instantly
     setTasks(prev => prev.filter(t => t.id !== id));
     try {
       await deleteTask(id);
-      notify();
     } catch {
-      load(); // Revert on unexpected error
+      load();
     }
   };
 
