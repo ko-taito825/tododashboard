@@ -1,4 +1,6 @@
+import Link from "next/link";
 import CurrentTime from "@/components/CurrentTime";
+import UserMenu from "@/components/UserMenu";
 import MemoWidget from "@/components/MemoWidget";
 import MonthlyAgenda from "@/components/MonthlyAgenda";
 import ProgressWidget from "@/components/ProgressWidget";
@@ -11,56 +13,69 @@ import WeeklyTask from "@/components/WeeklyTask";
 
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen bg-[#0C0C0C] text-white">
+    <div className="min-h-screen bg-[#0C0C0C] text-white">
 
-      {/* ── Main content (left) ── */}
-      <div className="flex-1 min-w-0 flex flex-col">
+      {/* ── Hero (full width) ── */}
+      <div
+        className="h-[280px] w-full"
+        style={{
+          backgroundImage: "url('/hero.png')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "top center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#0d0820",
+        }}
+      />
 
-        {/* Hero */}
-        <div
-          className="h-48 w-full bg-[#0d0820] shrink-0"
-          style={{
-            backgroundImage: "url('/hero.png')",
-            backgroundSize: "100% auto",
-            backgroundPosition: "top center",
-            backgroundRepeat: "no-repeat",
-          }}
-        />
-
-        {/* DASHBOARD title */}
-        <div className="px-8 pt-5 pb-2">
+      {/* ── DASHBOARD title + hr (full width, px-12 indent) ── */}
+      <div className="px-12 pt-5 pb-0 flex items-center justify-between">
+        <div className="flex items-baseline gap-6">
           <h1 className="text-3xl font-black tracking-[0.35em] text-white">DASHBOARD</h1>
-          <hr className="mt-2 border-gray-700" />
+          <Link href="/history" className="text-xs text-gray-500 hover:text-accent transition-colors tracking-widest uppercase">
+            History →
+          </Link>
         </div>
+        <UserMenu />
+      </div>
+      {/* hr: spans only the content area, stops at sidebar left edge (300px from right) */}
+      <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "300px" }} />
 
-        {/* Content grid: Routines | Habit | Tasks */}
-        <div className="px-8 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
-          <div className="flex flex-col gap-6">
-            <RoutineWidget category="morning_routine" title="MORNING ROUTINE" icon="sun" />
-            <RoutineWidget category="night_routine"   title="NIGHT ROUTINE"   icon="moon" />
+      {/* ── Content + Right sidebar ── */}
+      <div className="flex">
+
+        {/* Left content */}
+        <div className="flex-1 min-w-0">
+          {/* Content grid: Routines | Habit | Tasks */}
+          <div className="px-12 mt-5 grid grid-cols-[220px_1fr_1fr] gap-8">
+            <div className="flex flex-col gap-6">
+              <RoutineWidget category="morning_routine" title="MORNING ROUTINE" icon="sun" />
+              <RoutineWidget category="night_routine"   title="NIGHT ROUTINE"   icon="moon" />
+            </div>
+            <TodaysHabit />
+            <TodaysTasks />
           </div>
-          <TodaysHabit />
-          <TodaysTasks />
+
+          {/* Cards row: Memo | Weather | Weekly Task */}
+          <div className="px-12 mt-6 grid grid-cols-3 gap-4">
+            <MemoWidget />
+            <WeatherWidget />
+            <WeeklyTask />
+          </div>
         </div>
 
-        {/* Cards row: Memo | Weather | Weekly Task */}
-        <div className="px-8 mt-6 grid grid-cols-3 gap-4">
-          <MemoWidget />
-          <WeatherWidget />
-          <WeeklyTask />
-        </div>
-
-        {/* Bottom: Progress | Monthly Agenda */}
-        <div className="px-8 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
-          <ProgressWidget />
-          <MonthlyAgenda />
+        {/* Right sidebar: Clock at same level as content grid (mt-5 matches grid) */}
+        <div className="w-[300px] shrink-0 flex flex-col px-4">
+          <CurrentTime />
+          <div className="mt-4">
+            <TimerWidget />
+          </div>
         </div>
       </div>
 
-      {/* ── Right sidebar: Clock + Timer ── */}
-      <div className="w-[220px] shrink-0 flex flex-col gap-4 px-3 pt-0">
-        <CurrentTime />
-        <TimerWidget />
+      {/* ── Full-width bottom: Progress + Monthly Agenda ── */}
+      <div className="px-12 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
+        <ProgressWidget />
+        <MonthlyAgenda />
       </div>
 
     </div>

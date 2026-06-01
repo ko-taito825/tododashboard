@@ -10,7 +10,7 @@ export default function TodaysTasks() {
   const today = new Date().toISOString().slice(0, 10);
 
   const load = useCallback(async () => {
-    const data = await getTasks("today");
+    const data = await getTasks("today", { task_category: "0" });
     setTasks(data);
   }, []);
 
@@ -18,20 +18,28 @@ export default function TodaysTasks() {
 
   const add = async () => {
     if (!newTitle.trim()) return;
-    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false });
+    const t = await createTask({ title: newTitle.trim(), due_date: today, is_completed: false, task_category: "daily" });
     setTasks(prev => [...prev, t]);
     setNewTitle("");
     setAdding(false);
   };
 
   const toggle = async (task: Task) => {
-    const updated = await updateTask(task.id, { is_completed: !task.is_completed });
-    setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
+    try {
+      const updated = await updateTask(task.id, { is_completed: !task.is_completed });
+      setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
+    } catch {
+      setTasks(prev => prev.filter(t => t.id !== task.id));
+    }
   };
 
   const remove = async (id: number) => {
-    await deleteTask(id);
     setTasks(prev => prev.filter(t => t.id !== id));
+    try {
+      await deleteTask(id);
+    } catch {
+      load();
+    }
   };
 
   const done  = tasks.filter(t => t.is_completed).length;

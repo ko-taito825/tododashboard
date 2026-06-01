@@ -4,6 +4,7 @@ export interface Task {
   description: string | null;
   due_date: string | null;
   is_completed: boolean;
+  task_category: "daily" | "scheduled";
   created_at: string;
   updated_at: string;
 }
