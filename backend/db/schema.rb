@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_23_232216) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_01_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_232216) do
     t.text "description"
     t.date "due_date"
     t.boolean "is_completed", default: false, null: false
+    t.integer "task_category", default: 0, null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -67,8 +68,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_232216) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "weekly_reviews", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.date "week_start", null: false
+    t.index ["user_id", "week_start"], name: "index_weekly_reviews_on_user_id_and_week_start", unique: true
+  end
+
   add_foreign_key "daily_memos", "users"
   add_foreign_key "habit_logs", "habits"
   add_foreign_key "habits", "users"
   add_foreign_key "tasks", "users"
+  add_foreign_key "weekly_reviews", "users"
 end

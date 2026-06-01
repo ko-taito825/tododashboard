@@ -34,6 +34,14 @@ export interface DailyMemo {
   target_date: string;
 }
 
+export interface WeeklyReview {
+  id: number;
+  week_start: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ProgressData {
   date: string;
   day: string;

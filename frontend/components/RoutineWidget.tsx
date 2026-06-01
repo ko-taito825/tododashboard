@@ -84,7 +84,7 @@ export default function RoutineWidget({ category, title, icon }: Props) {
           <input
             autoFocus value={newName}
             onChange={e => setNewName(e.target.value)}
-            onKeyDown={e => { if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(false); }}
+            onKeyDown={e => { if (e.isComposing || e.nativeEvent.isComposing) return; if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(false); }}
             placeholder="To-do"
             className="flex-1 text-xs border-b border-accent/40 text-white placeholder-gray-700 py-0.5"
           />

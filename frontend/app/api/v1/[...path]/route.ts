@@ -19,7 +19,12 @@ async function proxy(req: NextRequest, params: { path: string[] }) {
   const isBodyMethod = !["GET", "HEAD"].includes(req.method);
   const body         = isBodyMethod ? await req.text() : undefined;
 
-  const res  = await fetch(target, { method: req.method, headers, body });
+  const res = await fetch(target, { method: req.method, headers, body });
+
+  if (res.status === 204) {
+    return new NextResponse(null, { status: 204 });
+  }
+
   const text = await res.text();
 
   return new NextResponse(text, {

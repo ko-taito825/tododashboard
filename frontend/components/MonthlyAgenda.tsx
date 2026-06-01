@@ -27,6 +27,8 @@ export default function MonthlyAgenda() {
   const [tasks, setTasks]       = useState<Task[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState("");
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+  const [isAdding, setIsAdding] = useState(false);
 
   const load = useCallback(async () => {
     const data = await getTasks("month", {
@@ -42,10 +44,15 @@ export default function MonthlyAgenda() {
   const todayStr = new Date().toISOString().slice(0, 10);
 
   const addTask = async (dateStr: string) => {
-    if (!newTitle.trim()) return;
-    const t = await createTask({ title: newTitle.trim(), due_date: dateStr, is_completed: false, task_category: "scheduled" });
-    setTasks(prev => [...prev, t]);
-    setNewTitle("");
+    if (!newTitle.trim() || isAdding) return;
+    setIsAdding(true);
+    try {
+      const t = await createTask({ title: newTitle.trim(), due_date: dateStr, is_completed: false, task_category: "scheduled" });
+      setTasks(prev => [...prev, t]);
+      setNewTitle("");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const toggleTask = async (task: Task) => {
@@ -54,8 +61,14 @@ export default function MonthlyAgenda() {
   };
 
   const removeTask = async (id: number) => {
-    await deleteTask(id);
-    setTasks(prev => prev.filter(t => t.id !== id));
+    if (deletingIds.has(id)) return;
+    setDeletingIds(prev => new Set(prev).add(id));
+    try {
+      await deleteTask(id);
+      setTasks(prev => prev.filter(t => t.id !== id));
+    } finally {
+      setDeletingIds(prev => { const s = new Set(prev); s.delete(id); return s; });
+    }
   };
 
   const prevMonth = () => setViewDate(v => ({
@@ -176,7 +189,8 @@ export default function MonthlyAgenda() {
                 </span>
                 <button
                   onClick={() => removeTask(task.id)}
-                  className="opacity-0 group-hover:opacity-100 text-red-400 text-xs"
+                  disabled={deletingIds.has(task.id)}
+                  className="opacity-0 group-hover:opacity-100 text-red-400 text-xs disabled:opacity-30 disabled:cursor-not-allowed"
                 >✕</button>
               </div>
             ))}
@@ -185,14 +199,15 @@ export default function MonthlyAgenda() {
             <input
               value={newTitle}
               onChange={e => setNewTitle(e.target.value)}
-              onKeyDown={e => { if (e.key === "Enter") addTask(selected); }}
+              onKeyDown={e => { if (e.isComposing || e.nativeEvent.isComposing) return; if (e.key === "Enter") addTask(selected); }}
               placeholder="予定を追加..."
               className="flex-1 text-xs border-b border-accent/40 text-white placeholder-gray-700 py-0.5"
             />
             <button
               onClick={() => addTask(selected)}
-              className="text-xs text-accent hover:text-accent-light"
-            >追加</button>
+              disabled={isAdding}
+              className="text-xs text-accent hover:text-accent-light disabled:opacity-40 disabled:cursor-not-allowed"
+            >{isAdding ? "…" : "追加"}</button>
           </div>
         </div>
       )}

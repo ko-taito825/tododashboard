@@ -1,14 +1,17 @@
 import Link from "next/link";
+import BgmWidget from "@/components/BgmWidget";
 import CurrentTime from "@/components/CurrentTime";
-import UserMenu from "@/components/UserMenu";
 import MemoWidget from "@/components/MemoWidget";
 import MonthlyAgenda from "@/components/MonthlyAgenda";
 import ProgressWidget from "@/components/ProgressWidget";
+import QuoteWidget from "@/components/QuoteWidget";
 import RoutineWidget from "@/components/RoutineWidget";
 import TimerWidget from "@/components/TimerWidget";
 import TodaysHabit from "@/components/TodaysHabit";
 import TodaysTasks from "@/components/TodaysTasks";
+import UserMenu from "@/components/UserMenu";
 import WeatherWidget from "@/components/WeatherWidget";
+import WeeklyReviewBanner from "@/components/WeeklyReviewBanner";
 import WeeklyTask from "@/components/WeeklyTask";
 
 export default function DashboardPage() {
@@ -34,11 +37,19 @@ export default function DashboardPage() {
           <Link href="/history" className="text-xs text-gray-500 hover:text-accent transition-colors tracking-widest uppercase">
             History →
           </Link>
+          <Link href="/history#reviews" className="text-xs text-gray-500 hover:text-accent transition-colors tracking-widest uppercase">
+            週次AIレビュー →
+          </Link>
         </div>
         <UserMenu />
       </div>
       {/* hr: spans only the content area, stops at sidebar left edge (300px from right) */}
       <hr className="mt-2 border-gray-700 ml-12" style={{ marginRight: "300px" }} />
+
+      {/* ── Weekly Review Banner (auto-generated on Mondays) ── */}
+      <div className="mt-4">
+        <WeeklyReviewBanner />
+      </div>
 
       {/* ── Content + Right sidebar ── */}
       <div className="flex">
@@ -63,19 +74,27 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Right sidebar: Clock at same level as content grid (mt-5 matches grid) */}
+        {/* Right sidebar */}
         <div className="w-[300px] shrink-0 flex flex-col px-4">
           <CurrentTime />
           <div className="mt-4">
             <TimerWidget />
           </div>
+          <div className="mt-4">
+            <BgmWidget />
+          </div>
         </div>
       </div>
 
       {/* ── Full-width bottom: Progress + Monthly Agenda ── */}
-      <div className="px-12 mt-8 mb-10 grid grid-cols-[2fr_3fr] gap-10 items-start">
+      <div className="px-12 mt-8 grid grid-cols-[2fr_3fr] gap-10 items-start">
         <ProgressWidget />
         <MonthlyAgenda />
+      </div>
+
+      {/* ── Quote of the day ── */}
+      <div className="mt-6 mb-10">
+        <QuoteWidget />
       </div>
 
     </div>
